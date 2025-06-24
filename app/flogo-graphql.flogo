@@ -6,10 +6,14 @@
     "github.com/project-flogo/contrib/activity/jsexec",
     "github.com/tibco/flogo-general/src/app/General/activity/mapper",
     "github.com/project-flogo/contrib/activity/actreturn",
+    "github.com/tibco/flogo-general/src/app/General/activity/log",
+    "github.com/project-flogo/flow/activity/subflow",
+    "github.com/project-flogo/datastore-contrib/mongodb/activity/queryDocument",
     "github.com/project-flogo/graphql/trigger/graphql",
     "github.com/tibco/flogo-general/src/app/General/trigger/startuphook",
     "github.com/project-flogo/contrib/function/coerce",
-    "github.com/project-flogo/contrib/function/array"
+    "github.com/project-flogo/contrib/function/array",
+    "github.com/project-flogo/datastore-contrib/mongodb/connection"
   ],
   "name": "flogo-graphql",
   "description": "Mobile Device GraphQL Service",
@@ -549,16 +553,23 @@
           {
             "id": 1,
             "from": "StartActivity",
-            "to": "Mapper",
+            "to": "LogMessage",
             "type": "label",
-            "label": "StartActivity to Mapper"
+            "label": "StartActivity to LogMessage"
           },
           {
             "id": 2,
-            "from": "Mapper",
-            "to": "SharedData",
+            "from": "LogMessage",
+            "to": "fetchFromMongoDB",
             "type": "label",
-            "label": "Mapper to SharedData"
+            "label": "LogMessage to fetchFromMongoDB"
+          },
+          {
+            "id": 3,
+            "from": "fetchFromMongoDB",
+            "to": "LogMessage1",
+            "type": "label",
+            "label": "fetchFromMongoDB to LogMessage1"
           }
         ],
         "tasks": [
@@ -571,397 +582,53 @@
             }
           },
           {
-            "id": "Mapper",
-            "name": "Mapper",
-            "description": "Mapper Activity",
+            "id": "LogMessage",
+            "name": "LogMessage",
+            "description": "Simple Log Message Activity",
             "activity": {
-              "ref": "#mapper",
+              "ref": "#log",
               "input": {
-                "input": {
-                  "mapping": [
-                    {
-                      "id": "1",
-                      "manufacturer": "Apple",
-                      "model": "iPhone 15 Pro",
-                      "year": 2023,
-                      "picture": "https://example.com/iphone15pro.jpg",
-                      "deviceType": "smartphone",
-                      "touchScreen": true,
-                      "os": "iOS",
-                      "osName": "iOS",
-                      "osVersion": "17.5",
-                      "wapStackVersion": "2.0",
-                      "wapBrowserVersion": "Safari/604.1",
-                      "uaProf": "https://www.apple.com/profiles/iphone15pro",
-                      "browserType": "Safari",
-                      "frequency": "850/900/1800/1900",
-                      "edge": false,
-                      "umts": true,
-                      "hsdpa": true,
-                      "hsupa": true,
-                      "hspa": true,
-                      "dcHspa": true,
-                      "lte": true,
-                      "lteA": true,
-                      "volte": true,
-                      "wifiCalling": true,
-                      "supportedRingtones": [
-                        "MP3",
-                        "AAC",
-                        "WAV"
-                      ],
-                      "supportedVideoFormat": [
-                        "MP4",
-                        "MOV",
-                        "H.265"
-                      ],
-                      "hasCamera": true,
-                      "hasVideoCall": true,
-                      "hasVoiceVoip": true,
-                      "hasBluetooth": true,
-                      "hasWirelessLan": true,
-                      "hasGps": true,
-                      "hasJavaMidp": false,
-                      "hasSms": true
-                    },
-                    {
-                      "id": "2",
-                      "manufacturer": "Samsung",
-                      "model": "Galaxy S24 Ultra",
-                      "year": 2024,
-                      "picture": "https://example.com/s24ultra.jpg",
-                      "deviceType": "smartphone",
-                      "touchScreen": true,
-                      "os": "Android",
-                      "osName": "Android",
-                      "osVersion": "14",
-                      "wapStackVersion": "2.0",
-                      "wapBrowserVersion": "Chrome/121.0.6167.164",
-                      "uaProf": "https://www.samsung.com/profiles/s24ultra",
-                      "browserType": "Chrome",
-                      "frequency": "850/900/1800/1900/2100",
-                      "edge": false,
-                      "umts": true,
-                      "hsdpa": true,
-                      "hsupa": true,
-                      "hspa": true,
-                      "dcHspa": true,
-                      "lte": true,
-                      "lteA": true,
-                      "volte": true,
-                      "wifiCalling": true,
-                      "supportedRingtones": [
-                        "MP3",
-                        "OGG",
-                        "WAV",
-                        "AAC"
-                      ],
-                      "supportedVideoFormat": [
-                        "MP4",
-                        "MKV",
-                        "H.265",
-                        "AV1"
-                      ],
-                      "hasCamera": true,
-                      "hasVideoCall": true,
-                      "hasVoiceVoip": true,
-                      "hasBluetooth": true,
-                      "hasWirelessLan": true,
-                      "hasGps": true,
-                      "hasJavaMidp": false,
-                      "hasSms": true
-                    },
-                    {
-                      "id": "3",
-                      "manufacturer": "Google",
-                      "model": "Pixel 8 Pro",
-                      "year": 2023,
-                      "picture": "https://example.com/pixel8pro.jpg",
-                      "deviceType": "smartphone",
-                      "touchScreen": true,
-                      "os": "Android",
-                      "osName": "Android",
-                      "osVersion": "14",
-                      "wapStackVersion": "2.0",
-                      "wapBrowserVersion": "Chrome/120.0.6099.144",
-                      "uaProf": "https://www.google.com/profiles/pixel8pro",
-                      "browserType": "Chrome",
-                      "frequency": "850/900/1800/1900/2100",
-                      "edge": false,
-                      "umts": true,
-                      "hsdpa": true,
-                      "hsupa": true,
-                      "hspa": true,
-                      "dcHspa": true,
-                      "lte": true,
-                      "lteA": true,
-                      "volte": true,
-                      "wifiCalling": true,
-                      "supportedRingtones": [
-                        "MP3",
-                        "OGG",
-                        "WAV",
-                        "AAC"
-                      ],
-                      "supportedVideoFormat": [
-                        "MP4",
-                        "MKV",
-                        "H.265"
-                      ],
-                      "hasCamera": true,
-                      "hasVideoCall": true,
-                      "hasVoiceVoip": true,
-                      "hasBluetooth": true,
-                      "hasWirelessLan": true,
-                      "hasGps": true,
-                      "hasJavaMidp": false,
-                      "hasSms": true
-                    },
-                    {
-                      "id": "4",
-                      "manufacturer": "Nokia",
-                      "model": "3310",
-                      "year": 2000,
-                      "picture": "https://example.com/nokia3310.jpg",
-                      "deviceType": "feature phone",
-                      "touchScreen": false,
-                      "os": "Nokia OS",
-                      "osName": "Nokia OS",
-                      "osVersion": "1.0",
-                      "wapStackVersion": "1.1",
-                      "wapBrowserVersion": "Nokia/1.0",
-                      "uaProf": "https://www.nokia.com/profiles/3310",
-                      "browserType": "Nokia Browser",
-                      "frequency": "900/1800",
-                      "edge": false,
-                      "umts": false,
-                      "hsdpa": false,
-                      "hsupa": false,
-                      "hspa": false,
-                      "dcHspa": false,
-                      "lte": false,
-                      "lteA": false,
-                      "volte": false,
-                      "wifiCalling": false,
-                      "supportedRingtones": [
-                        "MIDI",
-                        "Monophonic"
-                      ],
-                      "supportedVideoFormat": [],
-                      "hasCamera": false,
-                      "hasVideoCall": false,
-                      "hasVoiceVoip": false,
-                      "hasBluetooth": false,
-                      "hasWirelessLan": false,
-                      "hasGps": false,
-                      "hasJavaMidp": false,
-                      "hasSms": true
-                    },
-                    {
-                      "id": "5",
-                      "manufacturer": "Xiaomi",
-                      "model": "Redmi Note 12 Pro",
-                      "year": 2022,
-                      "picture": "https://example.com/redminote12pro.jpg",
-                      "deviceType": "smartphone",
-                      "touchScreen": true,
-                      "os": "Android",
-                      "osName": "Android",
-                      "osVersion": "13",
-                      "wapStackVersion": "2.0",
-                      "wapBrowserVersion": "Chrome/110.0.5481.153",
-                      "uaProf": "https://www.xiaomi.com/profiles/redminote12pro",
-                      "browserType": "Chrome",
-                      "frequency": "850/900/1800/1900/2100",
-                      "edge": false,
-                      "umts": true,
-                      "hsdpa": true,
-                      "hsupa": true,
-                      "hspa": true,
-                      "dcHspa": true,
-                      "lte": true,
-                      "lteA": true,
-                      "volte": true,
-                      "wifiCalling": true,
-                      "supportedRingtones": [
-                        "MP3",
-                        "OGG",
-                        "WAV",
-                        "AAC"
-                      ],
-                      "supportedVideoFormat": [
-                        "MP4",
-                        "MKV",
-                        "H.265"
-                      ],
-                      "hasCamera": true,
-                      "hasVideoCall": true,
-                      "hasVoiceVoip": true,
-                      "hasBluetooth": true,
-                      "hasWirelessLan": true,
-                      "hasGps": true,
-                      "hasJavaMidp": false,
-                      "hasSms": true
-                    },
-                    {
-                      "id": "6",
-                      "manufacturer": "Samsung",
-                      "model": "Galaxy Tab S9",
-                      "year": 2023,
-                      "picture": "https://example.com/tabs9.jpg",
-                      "deviceType": "tablet",
-                      "touchScreen": true,
-                      "os": "Android",
-                      "osName": "Android",
-                      "osVersion": "13",
-                      "wapStackVersion": "2.0",
-                      "wapBrowserVersion": "Chrome/115.0.5790.166",
-                      "uaProf": "https://www.samsung.com/profiles/tabs9",
-                      "browserType": "Chrome",
-                      "frequency": "850/900/1800/1900/2100",
-                      "edge": false,
-                      "umts": true,
-                      "hsdpa": true,
-                      "hsupa": true,
-                      "hspa": true,
-                      "dcHspa": true,
-                      "lte": true,
-                      "lteA": true,
-                      "volte": true,
-                      "wifiCalling": true,
-                      "supportedRingtones": [
-                        "MP3",
-                        "OGG",
-                        "WAV",
-                        "AAC"
-                      ],
-                      "supportedVideoFormat": [
-                        "MP4",
-                        "MKV",
-                        "H.265"
-                      ],
-                      "hasCamera": true,
-                      "hasVideoCall": true,
-                      "hasVoiceVoip": true,
-                      "hasBluetooth": true,
-                      "hasWirelessLan": true,
-                      "hasGps": true,
-                      "hasJavaMidp": false,
-                      "hasSms": false
-                    },
-                    {
-                      "id": "7",
-                      "manufacturer": "Apple",
-                      "model": "iPad Pro 12.9 (2024)",
-                      "year": 2024,
-                      "picture": "https://example.com/ipadpro2024.jpg",
-                      "deviceType": "tablet",
-                      "touchScreen": true,
-                      "os": "iPadOS",
-                      "osName": "iPadOS",
-                      "osVersion": "17.5",
-                      "wapStackVersion": "2.0",
-                      "wapBrowserVersion": "Safari/605.1.15",
-                      "uaProf": "https://www.apple.com/profiles/ipadpro2024",
-                      "browserType": "Safari",
-                      "frequency": "850/900/1800/1900/2100",
-                      "edge": false,
-                      "umts": true,
-                      "hsdpa": true,
-                      "hsupa": true,
-                      "hspa": true,
-                      "dcHspa": true,
-                      "lte": true,
-                      "lteA": true,
-                      "volte": true,
-                      "wifiCalling": true,
-                      "supportedRingtones": [
-                        "MP3",
-                        "AAC",
-                        "WAV"
-                      ],
-                      "supportedVideoFormat": [
-                        "MP4",
-                        "MOV",
-                        "H.265"
-                      ],
-                      "hasCamera": true,
-                      "hasVideoCall": true,
-                      "hasVoiceVoip": true,
-                      "hasBluetooth": true,
-                      "hasWirelessLan": true,
-                      "hasGps": true,
-                      "hasJavaMidp": false,
-                      "hasSms": false
-                    }
-                  ]
-                }
-              },
-              "schemas": {
-                "input": {
-                  "input": "schema://Devices"
-                },
-                "output": {
-                  "output": {
-                    "type": "json",
-                    "value": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Devices\",\n  \"description\": \"Schema for a collection of mobile devices\",\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"id\": {\n        \"type\": \"string\",\n        \"description\": \"Unique identifier for the device\"\n      },\n      \"manufacturer\": {\n        \"type\": \"string\",\n        \"description\": \"Company that manufactured the device\"\n      },\n      \"model\": {\n        \"type\": \"string\",\n        \"description\": \"Model name or number of the device\"\n      },\n      \"year\": {\n        \"type\": \"integer\",\n        \"description\": \"Year the device was released\",\n        \"minimum\": 1990\n      },\n      \"picture\": {\n        \"type\": \"string\",\n        \"format\": \"uri\",\n        \"description\": \"URL to an image of the device\"\n      },\n      \"deviceType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of device (e.g., smartphone, tablet, feature phone)\",\n        \"enum\": [\n          \"smartphone\",\n          \"tablet\",\n          \"feature phone\",\n          \"wearable\"\n        ]\n      },\n      \"touchScreen\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a touch screen\"\n      },\n      \"os\": {\n        \"type\": \"string\",\n        \"description\": \"Operating system of the device\"\n      },\n      \"osName\": {\n        \"type\": \"string\",\n        \"description\": \"Name of the operating system\"\n      },\n      \"osVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the operating system\"\n      },\n      \"wapStackVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP stack\"\n      },\n      \"wapBrowserVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP browser\"\n      },\n      \"uaProf\": {\n        \"type\": \"string\",\n        \"description\": \"User Agent Profile URL\"\n      },\n      \"browserType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of browser on the device\"\n      },\n      \"frequency\": {\n        \"type\": \"string\",\n        \"description\": \"Frequency bands supported by the device\"\n      },\n      \"edge\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports EDGE network\"\n      },\n      \"umts\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports UMTS network\"\n      },\n      \"hsdpa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSDPA\"\n      },\n      \"hsupa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSUPA\"\n      },\n      \"hspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSPA\"\n      },\n      \"dcHspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports DC-HSPA\"\n      },\n      \"lte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE\"\n      },\n      \"lteA\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE Advanced\"\n      },\n      \"volte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Voice over LTE\"\n      },\n      \"wifiCalling\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports WiFi calling\"\n      },\n      \"supportedRingtones\": {\n        \"type\": \"array\",\n        \"description\": \"Types of ringtones supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"supportedVideoFormat\": {\n        \"type\": \"array\",\n        \"description\": \"Video formats supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"hasCamera\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a camera\"\n      },\n      \"hasVideoCall\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports video calling\"\n      },\n      \"hasVoiceVoip\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports voice over IP\"\n      },\n      \"hasBluetooth\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has Bluetooth\"\n      },\n      \"hasWirelessLan\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has wireless LAN capability\"\n      },\n      \"hasGps\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has GPS\"\n      },\n      \"hasJavaMidp\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Java MIDP\"\n      },\n      \"hasSms\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports SMS\"\n      }\n    },\n    \"required\": [\n      \"id\",\n      \"manufacturer\",\n      \"model\"\n    ],\n    \"additionalProperties\": false\n  }\n}",
-                    "fe_metadata": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Devices\",\n  \"description\": \"Schema for a collection of mobile devices\",\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"id\": {\n        \"type\": \"string\",\n        \"description\": \"Unique identifier for the device\"\n      },\n      \"manufacturer\": {\n        \"type\": \"string\",\n        \"description\": \"Company that manufactured the device\"\n      },\n      \"model\": {\n        \"type\": \"string\",\n        \"description\": \"Model name or number of the device\"\n      },\n      \"year\": {\n        \"type\": \"integer\",\n        \"description\": \"Year the device was released\",\n        \"minimum\": 1990\n      },\n      \"picture\": {\n        \"type\": \"string\",\n        \"format\": \"uri\",\n        \"description\": \"URL to an image of the device\"\n      },\n      \"deviceType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of device (e.g., smartphone, tablet, feature phone)\",\n        \"enum\": [\n          \"smartphone\",\n          \"tablet\",\n          \"feature phone\",\n          \"wearable\"\n        ]\n      },\n      \"touchScreen\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a touch screen\"\n      },\n      \"os\": {\n        \"type\": \"string\",\n        \"description\": \"Operating system of the device\"\n      },\n      \"osName\": {\n        \"type\": \"string\",\n        \"description\": \"Name of the operating system\"\n      },\n      \"osVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the operating system\"\n      },\n      \"wapStackVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP stack\"\n      },\n      \"wapBrowserVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP browser\"\n      },\n      \"uaProf\": {\n        \"type\": \"string\",\n        \"description\": \"User Agent Profile URL\"\n      },\n      \"browserType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of browser on the device\"\n      },\n      \"frequency\": {\n        \"type\": \"string\",\n        \"description\": \"Frequency bands supported by the device\"\n      },\n      \"edge\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports EDGE network\"\n      },\n      \"umts\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports UMTS network\"\n      },\n      \"hsdpa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSDPA\"\n      },\n      \"hsupa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSUPA\"\n      },\n      \"hspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSPA\"\n      },\n      \"dcHspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports DC-HSPA\"\n      },\n      \"lte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE\"\n      },\n      \"lteA\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE Advanced\"\n      },\n      \"volte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Voice over LTE\"\n      },\n      \"wifiCalling\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports WiFi calling\"\n      },\n      \"supportedRingtones\": {\n        \"type\": \"array\",\n        \"description\": \"Types of ringtones supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"supportedVideoFormat\": {\n        \"type\": \"array\",\n        \"description\": \"Video formats supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"hasCamera\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a camera\"\n      },\n      \"hasVideoCall\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports video calling\"\n      },\n      \"hasVoiceVoip\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports voice over IP\"\n      },\n      \"hasBluetooth\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has Bluetooth\"\n      },\n      \"hasWirelessLan\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has wireless LAN capability\"\n      },\n      \"hasGps\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has GPS\"\n      },\n      \"hasJavaMidp\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Java MIDP\"\n      },\n      \"hasSms\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports SMS\"\n      }\n    },\n    \"required\": [\n      \"id\",\n      \"manufacturer\",\n      \"model\"\n    ],\n    \"additionalProperties\": false\n  }\n}"
-                  }
-                }
-              },
-              "feSchemaMap": {}
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "Pre-populating our devices data...",
+                "logLevel": ""
+              }
             }
           },
           {
-            "id": "SharedData",
-            "name": "SharedData",
-            "description": "Enable sharing of data within or across flows in the application",
+            "id": "fetchFromMongoDB",
+            "name": "fetchFromMongoDB",
+            "description": "Simple SubFlow Activity",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
             "activity": {
-              "ref": "#shareddata",
+              "ref": "#subflow",
               "settings": {
-                "scope": "Application",
-                "operation": "SET",
-                "type": "object",
-                "objectSchema": "{\r\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r\n  \"title\": \"Devices\",\r\n  \"description\": \"Schema for a collection of mobile devices\",\r\n  \"type\": \"array\",\r\n  \"items\": {\r\n    \"type\": \"object\",\r\n    \"properties\": {\r\n      \"id\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Unique identifier for the device\"\r\n      },\r\n      \"manufacturer\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Company that manufactured the device\"\r\n      },\r\n      \"model\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Model name or number of the device\"\r\n      },\r\n      \"year\": {\r\n        \"type\": \"integer\",\r\n        \"description\": \"Year the device was released\",\r\n        \"minimum\": 1990\r\n      },\r\n      \"picture\": {\r\n        \"type\": \"string\",\r\n        \"format\": \"uri\",\r\n        \"description\": \"URL to an image of the device\"\r\n      },\r\n      \"deviceType\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Type of device (e.g., smartphone, tablet, feature phone)\",\r\n        \"enum\": [\"smartphone\", \"tablet\", \"feature phone\", \"wearable\"]\r\n      },\r\n      \"touchScreen\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has a touch screen\"\r\n      },\r\n      \"os\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Operating system of the device\"\r\n      },\r\n      \"osName\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Name of the operating system\"\r\n      },\r\n      \"osVersion\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Version of the operating system\"\r\n      },\r\n      \"wapStackVersion\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Version of the WAP stack\"\r\n      },\r\n      \"wapBrowserVersion\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Version of the WAP browser\"\r\n      },\r\n      \"uaProf\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"User Agent Profile URL\"\r\n      },\r\n      \"browserType\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Type of browser on the device\"\r\n      },\r\n      \"frequency\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Frequency bands supported by the device\"\r\n      },\r\n      \"edge\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports EDGE network\"\r\n      },\r\n      \"umts\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports UMTS network\"\r\n      },\r\n      \"hsdpa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports HSDPA\"\r\n      },\r\n      \"hsupa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports HSUPA\"\r\n      },\r\n      \"hspa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports HSPA\"\r\n      },\r\n      \"dcHspa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports DC-HSPA\"\r\n      },\r\n      \"lte\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports LTE\"\r\n      },\r\n      \"lteA\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports LTE Advanced\"\r\n      },\r\n      \"volte\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports Voice over LTE\"\r\n      },\r\n      \"wifiCalling\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports WiFi calling\"\r\n      },\r\n      \"supportedRingtones\": {\r\n        \"type\": \"array\",\r\n        \"description\": \"Types of ringtones supported by the device\",\r\n        \"items\": {\r\n          \"type\": \"string\"\r\n        }\r\n      },\r\n      \"supportedVideoFormat\": {\r\n        \"type\": \"array\",\r\n        \"description\": \"Video formats supported by the device\",\r\n        \"items\": {\r\n          \"type\": \"string\"\r\n        }\r\n      },\r\n      \"hasCamera\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has a camera\"\r\n      },\r\n      \"hasVideoCall\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports video calling\"\r\n      },\r\n      \"hasVoiceVoip\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports voice over IP\"\r\n      },\r\n      \"hasBluetooth\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has Bluetooth\"\r\n      },\r\n      \"hasWirelessLan\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has wireless LAN capability\"\r\n      },\r\n      \"hasGps\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has GPS\"\r\n      },\r\n      \"hasJavaMidp\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports Java MIDP\"\r\n      },\r\n      \"hasSms\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports SMS\"\r\n      }\r\n    },\r\n    \"required\": [\"id\", \"manufacturer\", \"model\"],\r\n    \"additionalProperties\": false\r\n  }\r\n}"
-              },
+                "flowURI": "res://flow:fetchFromMongoDB",
+                "detached": false
+              }
+            }
+          },
+          {
+            "id": "LogMessage1",
+            "name": "LogMessage1",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
               "input": {
-                "key": "devices",
-                "input": {
-                  "mapping": {
-                    "data": {
-                      "Devices": {
-                        "@foreach($activity[Mapper].output,Devices)": {
-                          "=": "$loop"
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "schemas": {
-                "input": {
-                  "input": {
-                    "type": "json",
-                    "value": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"data\":{\"type\":\"object\",\"properties\":{\"Devices\":{\"title\":\"Devices\",\"description\":\"Schema for a collection of mobile devices\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Unique identifier for the device\"},\"manufacturer\":{\"type\":\"string\",\"description\":\"Company that manufactured the device\"},\"model\":{\"type\":\"string\",\"description\":\"Model name or number of the device\"},\"year\":{\"type\":\"integer\",\"description\":\"Year the device was released\",\"minimum\":1990},\"picture\":{\"type\":\"string\",\"format\":\"uri\",\"description\":\"URL to an image of the device\"},\"deviceType\":{\"type\":\"string\",\"description\":\"Type of device (e.g., smartphone, tablet, feature phone)\",\"enum\":[\"smartphone\",\"tablet\",\"feature phone\",\"wearable\"]},\"touchScreen\":{\"type\":\"boolean\",\"description\":\"Whether the device has a touch screen\"},\"os\":{\"type\":\"string\",\"description\":\"Operating system of the device\"},\"osName\":{\"type\":\"string\",\"description\":\"Name of the operating system\"},\"osVersion\":{\"type\":\"string\",\"description\":\"Version of the operating system\"},\"wapStackVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP stack\"},\"wapBrowserVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP browser\"},\"uaProf\":{\"type\":\"string\",\"description\":\"User Agent Profile URL\"},\"browserType\":{\"type\":\"string\",\"description\":\"Type of browser on the device\"},\"frequency\":{\"type\":\"string\",\"description\":\"Frequency bands supported by the device\"},\"edge\":{\"type\":\"boolean\",\"description\":\"Whether the device supports EDGE network\"},\"umts\":{\"type\":\"boolean\",\"description\":\"Whether the device supports UMTS network\"},\"hsdpa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSDPA\"},\"hsupa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSUPA\"},\"hspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSPA\"},\"dcHspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports DC-HSPA\"},\"lte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE\"},\"lteA\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE Advanced\"},\"volte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Voice over LTE\"},\"wifiCalling\":{\"type\":\"boolean\",\"description\":\"Whether the device supports WiFi calling\"},\"supportedRingtones\":{\"type\":\"array\",\"description\":\"Types of ringtones supported by the device\",\"items\":{\"type\":\"string\"}},\"supportedVideoFormat\":{\"type\":\"array\",\"description\":\"Video formats supported by the device\",\"items\":{\"type\":\"string\"}},\"hasCamera\":{\"type\":\"boolean\",\"description\":\"Whether the device has a camera\"},\"hasVideoCall\":{\"type\":\"boolean\",\"description\":\"Whether the device supports video calling\"},\"hasVoiceVoip\":{\"type\":\"boolean\",\"description\":\"Whether the device supports voice over IP\"},\"hasBluetooth\":{\"type\":\"boolean\",\"description\":\"Whether the device has Bluetooth\"},\"hasWirelessLan\":{\"type\":\"boolean\",\"description\":\"Whether the device has wireless LAN capability\"},\"hasGps\":{\"type\":\"boolean\",\"description\":\"Whether the device has GPS\"},\"hasJavaMidp\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Java MIDP\"},\"hasSms\":{\"type\":\"boolean\",\"description\":\"Whether the device supports SMS\"}},\"required\":[\"id\",\"manufacturer\",\"model\"],\"additionalProperties\":false}}}}}}",
-                    "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"data\":{\"type\":\"object\",\"properties\":{\"Devices\":{\"title\":\"Devices\",\"description\":\"Schema for a collection of mobile devices\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Unique identifier for the device\"},\"manufacturer\":{\"type\":\"string\",\"description\":\"Company that manufactured the device\"},\"model\":{\"type\":\"string\",\"description\":\"Model name or number of the device\"},\"year\":{\"type\":\"integer\",\"description\":\"Year the device was released\",\"minimum\":1990},\"picture\":{\"type\":\"string\",\"format\":\"uri\",\"description\":\"URL to an image of the device\"},\"deviceType\":{\"type\":\"string\",\"description\":\"Type of device (e.g., smartphone, tablet, feature phone)\",\"enum\":[\"smartphone\",\"tablet\",\"feature phone\",\"wearable\"]},\"touchScreen\":{\"type\":\"boolean\",\"description\":\"Whether the device has a touch screen\"},\"os\":{\"type\":\"string\",\"description\":\"Operating system of the device\"},\"osName\":{\"type\":\"string\",\"description\":\"Name of the operating system\"},\"osVersion\":{\"type\":\"string\",\"description\":\"Version of the operating system\"},\"wapStackVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP stack\"},\"wapBrowserVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP browser\"},\"uaProf\":{\"type\":\"string\",\"description\":\"User Agent Profile URL\"},\"browserType\":{\"type\":\"string\",\"description\":\"Type of browser on the device\"},\"frequency\":{\"type\":\"string\",\"description\":\"Frequency bands supported by the device\"},\"edge\":{\"type\":\"boolean\",\"description\":\"Whether the device supports EDGE network\"},\"umts\":{\"type\":\"boolean\",\"description\":\"Whether the device supports UMTS network\"},\"hsdpa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSDPA\"},\"hsupa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSUPA\"},\"hspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSPA\"},\"dcHspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports DC-HSPA\"},\"lte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE\"},\"lteA\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE Advanced\"},\"volte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Voice over LTE\"},\"wifiCalling\":{\"type\":\"boolean\",\"description\":\"Whether the device supports WiFi calling\"},\"supportedRingtones\":{\"type\":\"array\",\"description\":\"Types of ringtones supported by the device\",\"items\":{\"type\":\"string\"}},\"supportedVideoFormat\":{\"type\":\"array\",\"description\":\"Video formats supported by the device\",\"items\":{\"type\":\"string\"}},\"hasCamera\":{\"type\":\"boolean\",\"description\":\"Whether the device has a camera\"},\"hasVideoCall\":{\"type\":\"boolean\",\"description\":\"Whether the device supports video calling\"},\"hasVoiceVoip\":{\"type\":\"boolean\",\"description\":\"Whether the device supports voice over IP\"},\"hasBluetooth\":{\"type\":\"boolean\",\"description\":\"Whether the device has Bluetooth\"},\"hasWirelessLan\":{\"type\":\"boolean\",\"description\":\"Whether the device has wireless LAN capability\"},\"hasGps\":{\"type\":\"boolean\",\"description\":\"Whether the device has GPS\"},\"hasJavaMidp\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Java MIDP\"},\"hasSms\":{\"type\":\"boolean\",\"description\":\"Whether the device supports SMS\"}},\"required\":[\"id\",\"manufacturer\",\"model\"],\"additionalProperties\":false}}}}}}"
-                  }
-                },
-                "output": {
-                  "output": {
-                    "type": "json",
-                    "value": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"exist\":{\"type\":\"boolean\"},\"data\":{\"type\":\"string\"}}}",
-                    "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"exist\":{\"type\":\"boolean\"},\"data\":{\"type\":\"string\"}}}"
-                  }
-                },
-                "settings": {
-                  "objectSchema": "schema://Devices"
-                }
-              },
-              "feSchemaMap": {}
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "Done pre-populating data",
+                "logLevel": ""
+              }
             }
           }
         ],
-        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiTWFwcGVyIjp7IngiOjI2NywieSI6MTAwfSwiU2hhcmVkRGF0YSI6eyJ4Ijo1MTksInkiOjEwMH19",
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiTG9nTWVzc2FnZSI6eyJ4IjoyMzcsInkiOjkxfSwiZmV0Y2hGcm9tTW9uZ29EQiI6eyJ4Ijo0NjQsInkiOjkwfSwiTG9nTWVzc2FnZTEiOnsieCI6Njc1LCJ5Ijo5N319",
         "metadata": {
           "input": [],
           "output": [],
@@ -1056,7 +723,7 @@
                 "parameters": {
                   "mapping": {
                     "Devices": {
-                      "@foreach($activity[SharedData].output.data.Devices, Devices)": {
+                      "@foreach($activity[SharedData].output.data.Devices,Devices)": {
                         "=": "$loop"
                       }
                     },
@@ -1263,7 +930,7 @@
                 "parameters": {
                   "mapping": {
                     "Devices": {
-                      "@foreach($activity[SharedData].output.data.Devices, Devices)": {
+                      "@foreach($activity[SharedData].output.data.Devices,Devices)": {
                         "=": "$loop"
                       }
                     },
@@ -1702,7 +1369,7 @@
                   "data": {
                     "mapping": {
                       "Device": {
-                        "@foreach($activity[SharedData].output.data.Devices, Device)": {
+                        "@foreach($activity[SharedData].output.data.Devices,Device)": {
                           "=": "$loop"
                         }
                       }
@@ -1753,9 +1420,591 @@
           }
         }
       }
+    },
+    {
+      "id": "flow:fetchFromMongoDB",
+      "data": {
+        "name": "fetchFromMongoDB",
+        "description": "Fetch data from MongoDB and store in-memory",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "MongoDBQueryDocument",
+            "type": "label",
+            "label": "StartActivity to MongoDBQueryDocument"
+          },
+          {
+            "id": 2,
+            "from": "MongoDBQueryDocument",
+            "to": "Mapper",
+            "type": "label",
+            "label": "MongoDBQueryDocument to Mapper"
+          },
+          {
+            "id": 3,
+            "from": "Mapper",
+            "to": "SharedData",
+            "type": "label",
+            "label": "Mapper to SharedData"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "MongoDBQueryDocument",
+            "name": "MongoDBQueryDocument",
+            "description": "Mongodb Query Document activity",
+            "settings": {
+              "retryOnError": {
+                "count": 0,
+                "interval": 0
+              }
+            },
+            "activity": {
+              "ref": "#queryDocument",
+              "settings": {
+                "connection": "conn://6ddea435-817b-4ed6-8d62-fb8b131ea4e4",
+                "operation": "Find Many Documents",
+                "databaseName": "mydb",
+                "collectionName": "devices",
+                "timeout": 30
+              },
+              "input": {
+                "criteria": "=coerce.toObject(\"{}\")"
+              }
+            }
+          },
+          {
+            "id": "Mapper",
+            "name": "Mapper",
+            "description": "Mapper Activity",
+            "activity": {
+              "ref": "#mapper",
+              "input": {
+                "input": "=coerce.toArray($activity[MongoDBQueryDocument].response)"
+              },
+              "schemas": {
+                "input": {
+                  "input": "schema://Devices"
+                },
+                "output": {
+                  "output": {
+                    "type": "json",
+                    "value": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Devices\",\n  \"description\": \"Schema for a collection of mobile devices\",\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"id\": {\n        \"type\": \"string\",\n        \"description\": \"Unique identifier for the device\"\n      },\n      \"manufacturer\": {\n        \"type\": \"string\",\n        \"description\": \"Company that manufactured the device\"\n      },\n      \"model\": {\n        \"type\": \"string\",\n        \"description\": \"Model name or number of the device\"\n      },\n      \"year\": {\n        \"type\": \"integer\",\n        \"description\": \"Year the device was released\",\n        \"minimum\": 1990\n      },\n      \"picture\": {\n        \"type\": \"string\",\n        \"format\": \"uri\",\n        \"description\": \"URL to an image of the device\"\n      },\n      \"deviceType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of device (e.g., smartphone, tablet, feature phone)\",\n        \"enum\": [\n          \"smartphone\",\n          \"tablet\",\n          \"feature phone\",\n          \"wearable\"\n        ]\n      },\n      \"touchScreen\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a touch screen\"\n      },\n      \"os\": {\n        \"type\": \"string\",\n        \"description\": \"Operating system of the device\"\n      },\n      \"osName\": {\n        \"type\": \"string\",\n        \"description\": \"Name of the operating system\"\n      },\n      \"osVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the operating system\"\n      },\n      \"wapStackVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP stack\"\n      },\n      \"wapBrowserVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP browser\"\n      },\n      \"uaProf\": {\n        \"type\": \"string\",\n        \"description\": \"User Agent Profile URL\"\n      },\n      \"browserType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of browser on the device\"\n      },\n      \"frequency\": {\n        \"type\": \"string\",\n        \"description\": \"Frequency bands supported by the device\"\n      },\n      \"edge\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports EDGE network\"\n      },\n      \"umts\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports UMTS network\"\n      },\n      \"hsdpa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSDPA\"\n      },\n      \"hsupa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSUPA\"\n      },\n      \"hspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSPA\"\n      },\n      \"dcHspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports DC-HSPA\"\n      },\n      \"lte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE\"\n      },\n      \"lteA\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE Advanced\"\n      },\n      \"volte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Voice over LTE\"\n      },\n      \"wifiCalling\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports WiFi calling\"\n      },\n      \"supportedRingtones\": {\n        \"type\": \"array\",\n        \"description\": \"Types of ringtones supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"supportedVideoFormat\": {\n        \"type\": \"array\",\n        \"description\": \"Video formats supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"hasCamera\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a camera\"\n      },\n      \"hasVideoCall\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports video calling\"\n      },\n      \"hasVoiceVoip\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports voice over IP\"\n      },\n      \"hasBluetooth\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has Bluetooth\"\n      },\n      \"hasWirelessLan\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has wireless LAN capability\"\n      },\n      \"hasGps\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has GPS\"\n      },\n      \"hasJavaMidp\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Java MIDP\"\n      },\n      \"hasSms\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports SMS\"\n      }\n    },\n    \"required\": [\n      \"id\",\n      \"manufacturer\",\n      \"model\"\n    ],\n    \"additionalProperties\": false\n  }\n}",
+                    "fe_metadata": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Devices\",\n  \"description\": \"Schema for a collection of mobile devices\",\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"id\": {\n        \"type\": \"string\",\n        \"description\": \"Unique identifier for the device\"\n      },\n      \"manufacturer\": {\n        \"type\": \"string\",\n        \"description\": \"Company that manufactured the device\"\n      },\n      \"model\": {\n        \"type\": \"string\",\n        \"description\": \"Model name or number of the device\"\n      },\n      \"year\": {\n        \"type\": \"integer\",\n        \"description\": \"Year the device was released\",\n        \"minimum\": 1990\n      },\n      \"picture\": {\n        \"type\": \"string\",\n        \"format\": \"uri\",\n        \"description\": \"URL to an image of the device\"\n      },\n      \"deviceType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of device (e.g., smartphone, tablet, feature phone)\",\n        \"enum\": [\n          \"smartphone\",\n          \"tablet\",\n          \"feature phone\",\n          \"wearable\"\n        ]\n      },\n      \"touchScreen\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a touch screen\"\n      },\n      \"os\": {\n        \"type\": \"string\",\n        \"description\": \"Operating system of the device\"\n      },\n      \"osName\": {\n        \"type\": \"string\",\n        \"description\": \"Name of the operating system\"\n      },\n      \"osVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the operating system\"\n      },\n      \"wapStackVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP stack\"\n      },\n      \"wapBrowserVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP browser\"\n      },\n      \"uaProf\": {\n        \"type\": \"string\",\n        \"description\": \"User Agent Profile URL\"\n      },\n      \"browserType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of browser on the device\"\n      },\n      \"frequency\": {\n        \"type\": \"string\",\n        \"description\": \"Frequency bands supported by the device\"\n      },\n      \"edge\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports EDGE network\"\n      },\n      \"umts\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports UMTS network\"\n      },\n      \"hsdpa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSDPA\"\n      },\n      \"hsupa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSUPA\"\n      },\n      \"hspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSPA\"\n      },\n      \"dcHspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports DC-HSPA\"\n      },\n      \"lte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE\"\n      },\n      \"lteA\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE Advanced\"\n      },\n      \"volte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Voice over LTE\"\n      },\n      \"wifiCalling\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports WiFi calling\"\n      },\n      \"supportedRingtones\": {\n        \"type\": \"array\",\n        \"description\": \"Types of ringtones supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"supportedVideoFormat\": {\n        \"type\": \"array\",\n        \"description\": \"Video formats supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"hasCamera\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a camera\"\n      },\n      \"hasVideoCall\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports video calling\"\n      },\n      \"hasVoiceVoip\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports voice over IP\"\n      },\n      \"hasBluetooth\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has Bluetooth\"\n      },\n      \"hasWirelessLan\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has wireless LAN capability\"\n      },\n      \"hasGps\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has GPS\"\n      },\n      \"hasJavaMidp\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Java MIDP\"\n      },\n      \"hasSms\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports SMS\"\n      }\n    },\n    \"required\": [\n      \"id\",\n      \"manufacturer\",\n      \"model\"\n    ],\n    \"additionalProperties\": false\n  }\n}"
+                  }
+                }
+              },
+              "feSchemaMap": {}
+            }
+          },
+          {
+            "id": "SharedData",
+            "name": "SharedData",
+            "description": "Enable sharing of data within or across flows in the application",
+            "activity": {
+              "ref": "#shareddata",
+              "settings": {
+                "scope": "Application",
+                "operation": "SET",
+                "type": "object",
+                "objectSchema": "{\r\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r\n  \"title\": \"Devices\",\r\n  \"description\": \"Schema for a collection of mobile devices\",\r\n  \"type\": \"array\",\r\n  \"items\": {\r\n    \"type\": \"object\",\r\n    \"properties\": {\r\n      \"id\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Unique identifier for the device\"\r\n      },\r\n      \"manufacturer\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Company that manufactured the device\"\r\n      },\r\n      \"model\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Model name or number of the device\"\r\n      },\r\n      \"year\": {\r\n        \"type\": \"integer\",\r\n        \"description\": \"Year the device was released\",\r\n        \"minimum\": 1990\r\n      },\r\n      \"picture\": {\r\n        \"type\": \"string\",\r\n        \"format\": \"uri\",\r\n        \"description\": \"URL to an image of the device\"\r\n      },\r\n      \"deviceType\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Type of device (e.g., smartphone, tablet, feature phone)\",\r\n        \"enum\": [\"smartphone\", \"tablet\", \"feature phone\", \"wearable\"]\r\n      },\r\n      \"touchScreen\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has a touch screen\"\r\n      },\r\n      \"os\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Operating system of the device\"\r\n      },\r\n      \"osName\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Name of the operating system\"\r\n      },\r\n      \"osVersion\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Version of the operating system\"\r\n      },\r\n      \"wapStackVersion\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Version of the WAP stack\"\r\n      },\r\n      \"wapBrowserVersion\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Version of the WAP browser\"\r\n      },\r\n      \"uaProf\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"User Agent Profile URL\"\r\n      },\r\n      \"browserType\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Type of browser on the device\"\r\n      },\r\n      \"frequency\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Frequency bands supported by the device\"\r\n      },\r\n      \"edge\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports EDGE network\"\r\n      },\r\n      \"umts\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports UMTS network\"\r\n      },\r\n      \"hsdpa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports HSDPA\"\r\n      },\r\n      \"hsupa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports HSUPA\"\r\n      },\r\n      \"hspa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports HSPA\"\r\n      },\r\n      \"dcHspa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports DC-HSPA\"\r\n      },\r\n      \"lte\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports LTE\"\r\n      },\r\n      \"lteA\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports LTE Advanced\"\r\n      },\r\n      \"volte\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports Voice over LTE\"\r\n      },\r\n      \"wifiCalling\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports WiFi calling\"\r\n      },\r\n      \"supportedRingtones\": {\r\n        \"type\": \"array\",\r\n        \"description\": \"Types of ringtones supported by the device\",\r\n        \"items\": {\r\n          \"type\": \"string\"\r\n        }\r\n      },\r\n      \"supportedVideoFormat\": {\r\n        \"type\": \"array\",\r\n        \"description\": \"Video formats supported by the device\",\r\n        \"items\": {\r\n          \"type\": \"string\"\r\n        }\r\n      },\r\n      \"hasCamera\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has a camera\"\r\n      },\r\n      \"hasVideoCall\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports video calling\"\r\n      },\r\n      \"hasVoiceVoip\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports voice over IP\"\r\n      },\r\n      \"hasBluetooth\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has Bluetooth\"\r\n      },\r\n      \"hasWirelessLan\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has wireless LAN capability\"\r\n      },\r\n      \"hasGps\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has GPS\"\r\n      },\r\n      \"hasJavaMidp\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports Java MIDP\"\r\n      },\r\n      \"hasSms\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports SMS\"\r\n      }\r\n    },\r\n    \"required\": [\"id\", \"manufacturer\", \"model\"],\r\n    \"additionalProperties\": false\r\n  }\r\n}"
+              },
+              "input": {
+                "key": "devices",
+                "input": {
+                  "mapping": {
+                    "data": {
+                      "Devices": {
+                        "@foreach($activity[Mapper].output,Devices)": {
+                          "=": "$loop"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "schemas": {
+                "input": {
+                  "input": {
+                    "type": "json",
+                    "value": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"data\":{\"type\":\"object\",\"properties\":{\"Devices\":{\"title\":\"Devices\",\"description\":\"Schema for a collection of mobile devices\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Unique identifier for the device\"},\"manufacturer\":{\"type\":\"string\",\"description\":\"Company that manufactured the device\"},\"model\":{\"type\":\"string\",\"description\":\"Model name or number of the device\"},\"year\":{\"type\":\"integer\",\"description\":\"Year the device was released\",\"minimum\":1990},\"picture\":{\"type\":\"string\",\"format\":\"uri\",\"description\":\"URL to an image of the device\"},\"deviceType\":{\"type\":\"string\",\"description\":\"Type of device (e.g., smartphone, tablet, feature phone)\",\"enum\":[\"smartphone\",\"tablet\",\"feature phone\",\"wearable\"]},\"touchScreen\":{\"type\":\"boolean\",\"description\":\"Whether the device has a touch screen\"},\"os\":{\"type\":\"string\",\"description\":\"Operating system of the device\"},\"osName\":{\"type\":\"string\",\"description\":\"Name of the operating system\"},\"osVersion\":{\"type\":\"string\",\"description\":\"Version of the operating system\"},\"wapStackVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP stack\"},\"wapBrowserVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP browser\"},\"uaProf\":{\"type\":\"string\",\"description\":\"User Agent Profile URL\"},\"browserType\":{\"type\":\"string\",\"description\":\"Type of browser on the device\"},\"frequency\":{\"type\":\"string\",\"description\":\"Frequency bands supported by the device\"},\"edge\":{\"type\":\"boolean\",\"description\":\"Whether the device supports EDGE network\"},\"umts\":{\"type\":\"boolean\",\"description\":\"Whether the device supports UMTS network\"},\"hsdpa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSDPA\"},\"hsupa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSUPA\"},\"hspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSPA\"},\"dcHspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports DC-HSPA\"},\"lte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE\"},\"lteA\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE Advanced\"},\"volte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Voice over LTE\"},\"wifiCalling\":{\"type\":\"boolean\",\"description\":\"Whether the device supports WiFi calling\"},\"supportedRingtones\":{\"type\":\"array\",\"description\":\"Types of ringtones supported by the device\",\"items\":{\"type\":\"string\"}},\"supportedVideoFormat\":{\"type\":\"array\",\"description\":\"Video formats supported by the device\",\"items\":{\"type\":\"string\"}},\"hasCamera\":{\"type\":\"boolean\",\"description\":\"Whether the device has a camera\"},\"hasVideoCall\":{\"type\":\"boolean\",\"description\":\"Whether the device supports video calling\"},\"hasVoiceVoip\":{\"type\":\"boolean\",\"description\":\"Whether the device supports voice over IP\"},\"hasBluetooth\":{\"type\":\"boolean\",\"description\":\"Whether the device has Bluetooth\"},\"hasWirelessLan\":{\"type\":\"boolean\",\"description\":\"Whether the device has wireless LAN capability\"},\"hasGps\":{\"type\":\"boolean\",\"description\":\"Whether the device has GPS\"},\"hasJavaMidp\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Java MIDP\"},\"hasSms\":{\"type\":\"boolean\",\"description\":\"Whether the device supports SMS\"}},\"required\":[\"id\",\"manufacturer\",\"model\"],\"additionalProperties\":false}}}}}}",
+                    "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"data\":{\"type\":\"object\",\"properties\":{\"Devices\":{\"title\":\"Devices\",\"description\":\"Schema for a collection of mobile devices\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Unique identifier for the device\"},\"manufacturer\":{\"type\":\"string\",\"description\":\"Company that manufactured the device\"},\"model\":{\"type\":\"string\",\"description\":\"Model name or number of the device\"},\"year\":{\"type\":\"integer\",\"description\":\"Year the device was released\",\"minimum\":1990},\"picture\":{\"type\":\"string\",\"format\":\"uri\",\"description\":\"URL to an image of the device\"},\"deviceType\":{\"type\":\"string\",\"description\":\"Type of device (e.g., smartphone, tablet, feature phone)\",\"enum\":[\"smartphone\",\"tablet\",\"feature phone\",\"wearable\"]},\"touchScreen\":{\"type\":\"boolean\",\"description\":\"Whether the device has a touch screen\"},\"os\":{\"type\":\"string\",\"description\":\"Operating system of the device\"},\"osName\":{\"type\":\"string\",\"description\":\"Name of the operating system\"},\"osVersion\":{\"type\":\"string\",\"description\":\"Version of the operating system\"},\"wapStackVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP stack\"},\"wapBrowserVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP browser\"},\"uaProf\":{\"type\":\"string\",\"description\":\"User Agent Profile URL\"},\"browserType\":{\"type\":\"string\",\"description\":\"Type of browser on the device\"},\"frequency\":{\"type\":\"string\",\"description\":\"Frequency bands supported by the device\"},\"edge\":{\"type\":\"boolean\",\"description\":\"Whether the device supports EDGE network\"},\"umts\":{\"type\":\"boolean\",\"description\":\"Whether the device supports UMTS network\"},\"hsdpa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSDPA\"},\"hsupa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSUPA\"},\"hspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSPA\"},\"dcHspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports DC-HSPA\"},\"lte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE\"},\"lteA\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE Advanced\"},\"volte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Voice over LTE\"},\"wifiCalling\":{\"type\":\"boolean\",\"description\":\"Whether the device supports WiFi calling\"},\"supportedRingtones\":{\"type\":\"array\",\"description\":\"Types of ringtones supported by the device\",\"items\":{\"type\":\"string\"}},\"supportedVideoFormat\":{\"type\":\"array\",\"description\":\"Video formats supported by the device\",\"items\":{\"type\":\"string\"}},\"hasCamera\":{\"type\":\"boolean\",\"description\":\"Whether the device has a camera\"},\"hasVideoCall\":{\"type\":\"boolean\",\"description\":\"Whether the device supports video calling\"},\"hasVoiceVoip\":{\"type\":\"boolean\",\"description\":\"Whether the device supports voice over IP\"},\"hasBluetooth\":{\"type\":\"boolean\",\"description\":\"Whether the device has Bluetooth\"},\"hasWirelessLan\":{\"type\":\"boolean\",\"description\":\"Whether the device has wireless LAN capability\"},\"hasGps\":{\"type\":\"boolean\",\"description\":\"Whether the device has GPS\"},\"hasJavaMidp\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Java MIDP\"},\"hasSms\":{\"type\":\"boolean\",\"description\":\"Whether the device supports SMS\"}},\"required\":[\"id\",\"manufacturer\",\"model\"],\"additionalProperties\":false}}}}}}"
+                  }
+                },
+                "output": {
+                  "output": {
+                    "type": "json",
+                    "value": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"exist\":{\"type\":\"boolean\"},\"data\":{\"type\":\"string\"}}}",
+                    "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"exist\":{\"type\":\"boolean\"},\"data\":{\"type\":\"string\"}}}"
+                  }
+                },
+                "settings": {
+                  "objectSchema": "schema://Devices"
+                }
+              },
+              "feSchemaMap": {}
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiTW9uZ29EQlF1ZXJ5RG9jdW1lbnQiOnsieCI6MjQzLCJ5Ijo5MH0sIk1hcHBlciI6eyJ4Ijo0NzAsInkiOjkwfSwiU2hhcmVkRGF0YSI6eyJ4Ijo3MDksInkiOjkyfX0=",
+        "metadata": {
+          "input": [],
+          "output": [],
+          "fe_metadata": {}
+        }
+      }
+    },
+    {
+      "id": "flow:onStartup_1",
+      "data": {
+        "name": "onStartup_1",
+        "description": "Create some sample data and store it in a Shared Data object",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "Mapper",
+            "type": "label",
+            "label": "StartActivity to Mapper"
+          },
+          {
+            "id": 2,
+            "from": "Mapper",
+            "to": "SharedData",
+            "type": "label",
+            "label": "Mapper to SharedData"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "Mapper",
+            "name": "Mapper",
+            "description": "Mapper Activity",
+            "activity": {
+              "ref": "#mapper",
+              "input": {
+                "input": {
+                  "mapping": [
+                    {
+                      "id": "1",
+                      "manufacturer": "Apple",
+                      "model": "iPhone 15 Pro",
+                      "year": 2023,
+                      "picture": "https://example.com/iphone15pro.jpg",
+                      "deviceType": "smartphone",
+                      "touchScreen": true,
+                      "os": "iOS",
+                      "osName": "iOS",
+                      "osVersion": "17.5",
+                      "wapStackVersion": "2.0",
+                      "wapBrowserVersion": "Safari/604.1",
+                      "uaProf": "https://www.apple.com/profiles/iphone15pro",
+                      "browserType": "Safari",
+                      "frequency": "850/900/1800/1900",
+                      "edge": false,
+                      "umts": true,
+                      "hsdpa": true,
+                      "hsupa": true,
+                      "hspa": true,
+                      "dcHspa": true,
+                      "lte": true,
+                      "lteA": true,
+                      "volte": true,
+                      "wifiCalling": true,
+                      "supportedRingtones": [
+                        "MP3",
+                        "AAC",
+                        "WAV"
+                      ],
+                      "supportedVideoFormat": [
+                        "MP4",
+                        "MOV",
+                        "H.265"
+                      ],
+                      "hasCamera": true,
+                      "hasVideoCall": true,
+                      "hasVoiceVoip": true,
+                      "hasBluetooth": true,
+                      "hasWirelessLan": true,
+                      "hasGps": true,
+                      "hasJavaMidp": false,
+                      "hasSms": true
+                    },
+                    {
+                      "id": "2",
+                      "manufacturer": "Samsung",
+                      "model": "Galaxy S24 Ultra",
+                      "year": 2024,
+                      "picture": "https://example.com/s24ultra.jpg",
+                      "deviceType": "smartphone",
+                      "touchScreen": true,
+                      "os": "Android",
+                      "osName": "Android",
+                      "osVersion": "14",
+                      "wapStackVersion": "2.0",
+                      "wapBrowserVersion": "Chrome/121.0.6167.164",
+                      "uaProf": "https://www.samsung.com/profiles/s24ultra",
+                      "browserType": "Chrome",
+                      "frequency": "850/900/1800/1900/2100",
+                      "edge": false,
+                      "umts": true,
+                      "hsdpa": true,
+                      "hsupa": true,
+                      "hspa": true,
+                      "dcHspa": true,
+                      "lte": true,
+                      "lteA": true,
+                      "volte": true,
+                      "wifiCalling": true,
+                      "supportedRingtones": [
+                        "MP3",
+                        "OGG",
+                        "WAV",
+                        "AAC"
+                      ],
+                      "supportedVideoFormat": [
+                        "MP4",
+                        "MKV",
+                        "H.265",
+                        "AV1"
+                      ],
+                      "hasCamera": true,
+                      "hasVideoCall": true,
+                      "hasVoiceVoip": true,
+                      "hasBluetooth": true,
+                      "hasWirelessLan": true,
+                      "hasGps": true,
+                      "hasJavaMidp": false,
+                      "hasSms": true
+                    },
+                    {
+                      "id": "3",
+                      "manufacturer": "Google",
+                      "model": "Pixel 8 Pro",
+                      "year": 2023,
+                      "picture": "https://example.com/pixel8pro.jpg",
+                      "deviceType": "smartphone",
+                      "touchScreen": true,
+                      "os": "Android",
+                      "osName": "Android",
+                      "osVersion": "14",
+                      "wapStackVersion": "2.0",
+                      "wapBrowserVersion": "Chrome/120.0.6099.144",
+                      "uaProf": "https://www.google.com/profiles/pixel8pro",
+                      "browserType": "Chrome",
+                      "frequency": "850/900/1800/1900/2100",
+                      "edge": false,
+                      "umts": true,
+                      "hsdpa": true,
+                      "hsupa": true,
+                      "hspa": true,
+                      "dcHspa": true,
+                      "lte": true,
+                      "lteA": true,
+                      "volte": true,
+                      "wifiCalling": true,
+                      "supportedRingtones": [
+                        "MP3",
+                        "OGG",
+                        "WAV",
+                        "AAC"
+                      ],
+                      "supportedVideoFormat": [
+                        "MP4",
+                        "MKV",
+                        "H.265"
+                      ],
+                      "hasCamera": true,
+                      "hasVideoCall": true,
+                      "hasVoiceVoip": true,
+                      "hasBluetooth": true,
+                      "hasWirelessLan": true,
+                      "hasGps": true,
+                      "hasJavaMidp": false,
+                      "hasSms": true
+                    },
+                    {
+                      "id": "4",
+                      "manufacturer": "Nokia",
+                      "model": "3310",
+                      "year": 2000,
+                      "picture": "https://example.com/nokia3310.jpg",
+                      "deviceType": "feature phone",
+                      "touchScreen": false,
+                      "os": "Nokia OS",
+                      "osName": "Nokia OS",
+                      "osVersion": "1.0",
+                      "wapStackVersion": "1.1",
+                      "wapBrowserVersion": "Nokia/1.0",
+                      "uaProf": "https://www.nokia.com/profiles/3310",
+                      "browserType": "Nokia Browser",
+                      "frequency": "900/1800",
+                      "edge": false,
+                      "umts": false,
+                      "hsdpa": false,
+                      "hsupa": false,
+                      "hspa": false,
+                      "dcHspa": false,
+                      "lte": false,
+                      "lteA": false,
+                      "volte": false,
+                      "wifiCalling": false,
+                      "supportedRingtones": [
+                        "MIDI",
+                        "Monophonic"
+                      ],
+                      "supportedVideoFormat": [],
+                      "hasCamera": false,
+                      "hasVideoCall": false,
+                      "hasVoiceVoip": false,
+                      "hasBluetooth": false,
+                      "hasWirelessLan": false,
+                      "hasGps": false,
+                      "hasJavaMidp": false,
+                      "hasSms": true
+                    },
+                    {
+                      "id": "5",
+                      "manufacturer": "Xiaomi",
+                      "model": "Redmi Note 12 Pro",
+                      "year": 2022,
+                      "picture": "https://example.com/redminote12pro.jpg",
+                      "deviceType": "smartphone",
+                      "touchScreen": true,
+                      "os": "Android",
+                      "osName": "Android",
+                      "osVersion": "13",
+                      "wapStackVersion": "2.0",
+                      "wapBrowserVersion": "Chrome/110.0.5481.153",
+                      "uaProf": "https://www.xiaomi.com/profiles/redminote12pro",
+                      "browserType": "Chrome",
+                      "frequency": "850/900/1800/1900/2100",
+                      "edge": false,
+                      "umts": true,
+                      "hsdpa": true,
+                      "hsupa": true,
+                      "hspa": true,
+                      "dcHspa": true,
+                      "lte": true,
+                      "lteA": true,
+                      "volte": true,
+                      "wifiCalling": true,
+                      "supportedRingtones": [
+                        "MP3",
+                        "OGG",
+                        "WAV",
+                        "AAC"
+                      ],
+                      "supportedVideoFormat": [
+                        "MP4",
+                        "MKV",
+                        "H.265"
+                      ],
+                      "hasCamera": true,
+                      "hasVideoCall": true,
+                      "hasVoiceVoip": true,
+                      "hasBluetooth": true,
+                      "hasWirelessLan": true,
+                      "hasGps": true,
+                      "hasJavaMidp": false,
+                      "hasSms": true
+                    },
+                    {
+                      "id": "6",
+                      "manufacturer": "Samsung",
+                      "model": "Galaxy Tab S9",
+                      "year": 2023,
+                      "picture": "https://example.com/tabs9.jpg",
+                      "deviceType": "tablet",
+                      "touchScreen": true,
+                      "os": "Android",
+                      "osName": "Android",
+                      "osVersion": "13",
+                      "wapStackVersion": "2.0",
+                      "wapBrowserVersion": "Chrome/115.0.5790.166",
+                      "uaProf": "https://www.samsung.com/profiles/tabs9",
+                      "browserType": "Chrome",
+                      "frequency": "850/900/1800/1900/2100",
+                      "edge": false,
+                      "umts": true,
+                      "hsdpa": true,
+                      "hsupa": true,
+                      "hspa": true,
+                      "dcHspa": true,
+                      "lte": true,
+                      "lteA": true,
+                      "volte": true,
+                      "wifiCalling": true,
+                      "supportedRingtones": [
+                        "MP3",
+                        "OGG",
+                        "WAV",
+                        "AAC"
+                      ],
+                      "supportedVideoFormat": [
+                        "MP4",
+                        "MKV",
+                        "H.265"
+                      ],
+                      "hasCamera": true,
+                      "hasVideoCall": true,
+                      "hasVoiceVoip": true,
+                      "hasBluetooth": true,
+                      "hasWirelessLan": true,
+                      "hasGps": true,
+                      "hasJavaMidp": false,
+                      "hasSms": false
+                    },
+                    {
+                      "id": "7",
+                      "manufacturer": "Apple",
+                      "model": "iPad Pro 12.9 (2024)",
+                      "year": 2024,
+                      "picture": "https://example.com/ipadpro2024.jpg",
+                      "deviceType": "tablet",
+                      "touchScreen": true,
+                      "os": "iPadOS",
+                      "osName": "iPadOS",
+                      "osVersion": "17.5",
+                      "wapStackVersion": "2.0",
+                      "wapBrowserVersion": "Safari/605.1.15",
+                      "uaProf": "https://www.apple.com/profiles/ipadpro2024",
+                      "browserType": "Safari",
+                      "frequency": "850/900/1800/1900/2100",
+                      "edge": false,
+                      "umts": true,
+                      "hsdpa": true,
+                      "hsupa": true,
+                      "hspa": true,
+                      "dcHspa": true,
+                      "lte": true,
+                      "lteA": true,
+                      "volte": true,
+                      "wifiCalling": true,
+                      "supportedRingtones": [
+                        "MP3",
+                        "AAC",
+                        "WAV"
+                      ],
+                      "supportedVideoFormat": [
+                        "MP4",
+                        "MOV",
+                        "H.265"
+                      ],
+                      "hasCamera": true,
+                      "hasVideoCall": true,
+                      "hasVoiceVoip": true,
+                      "hasBluetooth": true,
+                      "hasWirelessLan": true,
+                      "hasGps": true,
+                      "hasJavaMidp": false,
+                      "hasSms": false
+                    }
+                  ]
+                }
+              },
+              "schemas": {
+                "input": {
+                  "input": "schema://Devices"
+                },
+                "output": {
+                  "output": {
+                    "type": "json",
+                    "value": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Devices\",\n  \"description\": \"Schema for a collection of mobile devices\",\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"id\": {\n        \"type\": \"string\",\n        \"description\": \"Unique identifier for the device\"\n      },\n      \"manufacturer\": {\n        \"type\": \"string\",\n        \"description\": \"Company that manufactured the device\"\n      },\n      \"model\": {\n        \"type\": \"string\",\n        \"description\": \"Model name or number of the device\"\n      },\n      \"year\": {\n        \"type\": \"integer\",\n        \"description\": \"Year the device was released\",\n        \"minimum\": 1990\n      },\n      \"picture\": {\n        \"type\": \"string\",\n        \"format\": \"uri\",\n        \"description\": \"URL to an image of the device\"\n      },\n      \"deviceType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of device (e.g., smartphone, tablet, feature phone)\",\n        \"enum\": [\n          \"smartphone\",\n          \"tablet\",\n          \"feature phone\",\n          \"wearable\"\n        ]\n      },\n      \"touchScreen\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a touch screen\"\n      },\n      \"os\": {\n        \"type\": \"string\",\n        \"description\": \"Operating system of the device\"\n      },\n      \"osName\": {\n        \"type\": \"string\",\n        \"description\": \"Name of the operating system\"\n      },\n      \"osVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the operating system\"\n      },\n      \"wapStackVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP stack\"\n      },\n      \"wapBrowserVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP browser\"\n      },\n      \"uaProf\": {\n        \"type\": \"string\",\n        \"description\": \"User Agent Profile URL\"\n      },\n      \"browserType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of browser on the device\"\n      },\n      \"frequency\": {\n        \"type\": \"string\",\n        \"description\": \"Frequency bands supported by the device\"\n      },\n      \"edge\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports EDGE network\"\n      },\n      \"umts\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports UMTS network\"\n      },\n      \"hsdpa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSDPA\"\n      },\n      \"hsupa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSUPA\"\n      },\n      \"hspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSPA\"\n      },\n      \"dcHspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports DC-HSPA\"\n      },\n      \"lte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE\"\n      },\n      \"lteA\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE Advanced\"\n      },\n      \"volte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Voice over LTE\"\n      },\n      \"wifiCalling\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports WiFi calling\"\n      },\n      \"supportedRingtones\": {\n        \"type\": \"array\",\n        \"description\": \"Types of ringtones supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"supportedVideoFormat\": {\n        \"type\": \"array\",\n        \"description\": \"Video formats supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"hasCamera\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a camera\"\n      },\n      \"hasVideoCall\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports video calling\"\n      },\n      \"hasVoiceVoip\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports voice over IP\"\n      },\n      \"hasBluetooth\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has Bluetooth\"\n      },\n      \"hasWirelessLan\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has wireless LAN capability\"\n      },\n      \"hasGps\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has GPS\"\n      },\n      \"hasJavaMidp\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Java MIDP\"\n      },\n      \"hasSms\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports SMS\"\n      }\n    },\n    \"required\": [\n      \"id\",\n      \"manufacturer\",\n      \"model\"\n    ],\n    \"additionalProperties\": false\n  }\n}",
+                    "fe_metadata": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Devices\",\n  \"description\": \"Schema for a collection of mobile devices\",\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"id\": {\n        \"type\": \"string\",\n        \"description\": \"Unique identifier for the device\"\n      },\n      \"manufacturer\": {\n        \"type\": \"string\",\n        \"description\": \"Company that manufactured the device\"\n      },\n      \"model\": {\n        \"type\": \"string\",\n        \"description\": \"Model name or number of the device\"\n      },\n      \"year\": {\n        \"type\": \"integer\",\n        \"description\": \"Year the device was released\",\n        \"minimum\": 1990\n      },\n      \"picture\": {\n        \"type\": \"string\",\n        \"format\": \"uri\",\n        \"description\": \"URL to an image of the device\"\n      },\n      \"deviceType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of device (e.g., smartphone, tablet, feature phone)\",\n        \"enum\": [\n          \"smartphone\",\n          \"tablet\",\n          \"feature phone\",\n          \"wearable\"\n        ]\n      },\n      \"touchScreen\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a touch screen\"\n      },\n      \"os\": {\n        \"type\": \"string\",\n        \"description\": \"Operating system of the device\"\n      },\n      \"osName\": {\n        \"type\": \"string\",\n        \"description\": \"Name of the operating system\"\n      },\n      \"osVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the operating system\"\n      },\n      \"wapStackVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP stack\"\n      },\n      \"wapBrowserVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version of the WAP browser\"\n      },\n      \"uaProf\": {\n        \"type\": \"string\",\n        \"description\": \"User Agent Profile URL\"\n      },\n      \"browserType\": {\n        \"type\": \"string\",\n        \"description\": \"Type of browser on the device\"\n      },\n      \"frequency\": {\n        \"type\": \"string\",\n        \"description\": \"Frequency bands supported by the device\"\n      },\n      \"edge\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports EDGE network\"\n      },\n      \"umts\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports UMTS network\"\n      },\n      \"hsdpa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSDPA\"\n      },\n      \"hsupa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSUPA\"\n      },\n      \"hspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports HSPA\"\n      },\n      \"dcHspa\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports DC-HSPA\"\n      },\n      \"lte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE\"\n      },\n      \"lteA\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports LTE Advanced\"\n      },\n      \"volte\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Voice over LTE\"\n      },\n      \"wifiCalling\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports WiFi calling\"\n      },\n      \"supportedRingtones\": {\n        \"type\": \"array\",\n        \"description\": \"Types of ringtones supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"supportedVideoFormat\": {\n        \"type\": \"array\",\n        \"description\": \"Video formats supported by the device\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"hasCamera\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has a camera\"\n      },\n      \"hasVideoCall\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports video calling\"\n      },\n      \"hasVoiceVoip\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports voice over IP\"\n      },\n      \"hasBluetooth\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has Bluetooth\"\n      },\n      \"hasWirelessLan\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has wireless LAN capability\"\n      },\n      \"hasGps\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device has GPS\"\n      },\n      \"hasJavaMidp\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports Java MIDP\"\n      },\n      \"hasSms\": {\n        \"type\": \"boolean\",\n        \"description\": \"Whether the device supports SMS\"\n      }\n    },\n    \"required\": [\n      \"id\",\n      \"manufacturer\",\n      \"model\"\n    ],\n    \"additionalProperties\": false\n  }\n}"
+                  }
+                }
+              },
+              "feSchemaMap": {}
+            }
+          },
+          {
+            "id": "SharedData",
+            "name": "SharedData",
+            "description": "Enable sharing of data within or across flows in the application",
+            "activity": {
+              "ref": "#shareddata",
+              "settings": {
+                "scope": "Application",
+                "operation": "SET",
+                "type": "object",
+                "objectSchema": "{\r\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r\n  \"title\": \"Devices\",\r\n  \"description\": \"Schema for a collection of mobile devices\",\r\n  \"type\": \"array\",\r\n  \"items\": {\r\n    \"type\": \"object\",\r\n    \"properties\": {\r\n      \"id\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Unique identifier for the device\"\r\n      },\r\n      \"manufacturer\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Company that manufactured the device\"\r\n      },\r\n      \"model\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Model name or number of the device\"\r\n      },\r\n      \"year\": {\r\n        \"type\": \"integer\",\r\n        \"description\": \"Year the device was released\",\r\n        \"minimum\": 1990\r\n      },\r\n      \"picture\": {\r\n        \"type\": \"string\",\r\n        \"format\": \"uri\",\r\n        \"description\": \"URL to an image of the device\"\r\n      },\r\n      \"deviceType\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Type of device (e.g., smartphone, tablet, feature phone)\",\r\n        \"enum\": [\"smartphone\", \"tablet\", \"feature phone\", \"wearable\"]\r\n      },\r\n      \"touchScreen\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has a touch screen\"\r\n      },\r\n      \"os\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Operating system of the device\"\r\n      },\r\n      \"osName\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Name of the operating system\"\r\n      },\r\n      \"osVersion\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Version of the operating system\"\r\n      },\r\n      \"wapStackVersion\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Version of the WAP stack\"\r\n      },\r\n      \"wapBrowserVersion\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Version of the WAP browser\"\r\n      },\r\n      \"uaProf\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"User Agent Profile URL\"\r\n      },\r\n      \"browserType\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Type of browser on the device\"\r\n      },\r\n      \"frequency\": {\r\n        \"type\": \"string\",\r\n        \"description\": \"Frequency bands supported by the device\"\r\n      },\r\n      \"edge\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports EDGE network\"\r\n      },\r\n      \"umts\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports UMTS network\"\r\n      },\r\n      \"hsdpa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports HSDPA\"\r\n      },\r\n      \"hsupa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports HSUPA\"\r\n      },\r\n      \"hspa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports HSPA\"\r\n      },\r\n      \"dcHspa\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports DC-HSPA\"\r\n      },\r\n      \"lte\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports LTE\"\r\n      },\r\n      \"lteA\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports LTE Advanced\"\r\n      },\r\n      \"volte\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports Voice over LTE\"\r\n      },\r\n      \"wifiCalling\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports WiFi calling\"\r\n      },\r\n      \"supportedRingtones\": {\r\n        \"type\": \"array\",\r\n        \"description\": \"Types of ringtones supported by the device\",\r\n        \"items\": {\r\n          \"type\": \"string\"\r\n        }\r\n      },\r\n      \"supportedVideoFormat\": {\r\n        \"type\": \"array\",\r\n        \"description\": \"Video formats supported by the device\",\r\n        \"items\": {\r\n          \"type\": \"string\"\r\n        }\r\n      },\r\n      \"hasCamera\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has a camera\"\r\n      },\r\n      \"hasVideoCall\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports video calling\"\r\n      },\r\n      \"hasVoiceVoip\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports voice over IP\"\r\n      },\r\n      \"hasBluetooth\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has Bluetooth\"\r\n      },\r\n      \"hasWirelessLan\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has wireless LAN capability\"\r\n      },\r\n      \"hasGps\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device has GPS\"\r\n      },\r\n      \"hasJavaMidp\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports Java MIDP\"\r\n      },\r\n      \"hasSms\": {\r\n        \"type\": \"boolean\",\r\n        \"description\": \"Whether the device supports SMS\"\r\n      }\r\n    },\r\n    \"required\": [\"id\", \"manufacturer\", \"model\"],\r\n    \"additionalProperties\": false\r\n  }\r\n}"
+              },
+              "input": {
+                "key": "devices",
+                "input": {
+                  "mapping": {
+                    "data": {
+                      "Devices": {
+                        "@foreach($activity[Mapper].output,Devices)": {
+                          "=": "$loop"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "schemas": {
+                "input": {
+                  "input": {
+                    "type": "json",
+                    "value": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"data\":{\"type\":\"object\",\"properties\":{\"Devices\":{\"title\":\"Devices\",\"description\":\"Schema for a collection of mobile devices\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Unique identifier for the device\"},\"manufacturer\":{\"type\":\"string\",\"description\":\"Company that manufactured the device\"},\"model\":{\"type\":\"string\",\"description\":\"Model name or number of the device\"},\"year\":{\"type\":\"integer\",\"description\":\"Year the device was released\",\"minimum\":1990},\"picture\":{\"type\":\"string\",\"format\":\"uri\",\"description\":\"URL to an image of the device\"},\"deviceType\":{\"type\":\"string\",\"description\":\"Type of device (e.g., smartphone, tablet, feature phone)\",\"enum\":[\"smartphone\",\"tablet\",\"feature phone\",\"wearable\"]},\"touchScreen\":{\"type\":\"boolean\",\"description\":\"Whether the device has a touch screen\"},\"os\":{\"type\":\"string\",\"description\":\"Operating system of the device\"},\"osName\":{\"type\":\"string\",\"description\":\"Name of the operating system\"},\"osVersion\":{\"type\":\"string\",\"description\":\"Version of the operating system\"},\"wapStackVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP stack\"},\"wapBrowserVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP browser\"},\"uaProf\":{\"type\":\"string\",\"description\":\"User Agent Profile URL\"},\"browserType\":{\"type\":\"string\",\"description\":\"Type of browser on the device\"},\"frequency\":{\"type\":\"string\",\"description\":\"Frequency bands supported by the device\"},\"edge\":{\"type\":\"boolean\",\"description\":\"Whether the device supports EDGE network\"},\"umts\":{\"type\":\"boolean\",\"description\":\"Whether the device supports UMTS network\"},\"hsdpa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSDPA\"},\"hsupa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSUPA\"},\"hspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSPA\"},\"dcHspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports DC-HSPA\"},\"lte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE\"},\"lteA\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE Advanced\"},\"volte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Voice over LTE\"},\"wifiCalling\":{\"type\":\"boolean\",\"description\":\"Whether the device supports WiFi calling\"},\"supportedRingtones\":{\"type\":\"array\",\"description\":\"Types of ringtones supported by the device\",\"items\":{\"type\":\"string\"}},\"supportedVideoFormat\":{\"type\":\"array\",\"description\":\"Video formats supported by the device\",\"items\":{\"type\":\"string\"}},\"hasCamera\":{\"type\":\"boolean\",\"description\":\"Whether the device has a camera\"},\"hasVideoCall\":{\"type\":\"boolean\",\"description\":\"Whether the device supports video calling\"},\"hasVoiceVoip\":{\"type\":\"boolean\",\"description\":\"Whether the device supports voice over IP\"},\"hasBluetooth\":{\"type\":\"boolean\",\"description\":\"Whether the device has Bluetooth\"},\"hasWirelessLan\":{\"type\":\"boolean\",\"description\":\"Whether the device has wireless LAN capability\"},\"hasGps\":{\"type\":\"boolean\",\"description\":\"Whether the device has GPS\"},\"hasJavaMidp\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Java MIDP\"},\"hasSms\":{\"type\":\"boolean\",\"description\":\"Whether the device supports SMS\"}},\"required\":[\"id\",\"manufacturer\",\"model\"],\"additionalProperties\":false}}}}}}",
+                    "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"data\":{\"type\":\"object\",\"properties\":{\"Devices\":{\"title\":\"Devices\",\"description\":\"Schema for a collection of mobile devices\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Unique identifier for the device\"},\"manufacturer\":{\"type\":\"string\",\"description\":\"Company that manufactured the device\"},\"model\":{\"type\":\"string\",\"description\":\"Model name or number of the device\"},\"year\":{\"type\":\"integer\",\"description\":\"Year the device was released\",\"minimum\":1990},\"picture\":{\"type\":\"string\",\"format\":\"uri\",\"description\":\"URL to an image of the device\"},\"deviceType\":{\"type\":\"string\",\"description\":\"Type of device (e.g., smartphone, tablet, feature phone)\",\"enum\":[\"smartphone\",\"tablet\",\"feature phone\",\"wearable\"]},\"touchScreen\":{\"type\":\"boolean\",\"description\":\"Whether the device has a touch screen\"},\"os\":{\"type\":\"string\",\"description\":\"Operating system of the device\"},\"osName\":{\"type\":\"string\",\"description\":\"Name of the operating system\"},\"osVersion\":{\"type\":\"string\",\"description\":\"Version of the operating system\"},\"wapStackVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP stack\"},\"wapBrowserVersion\":{\"type\":\"string\",\"description\":\"Version of the WAP browser\"},\"uaProf\":{\"type\":\"string\",\"description\":\"User Agent Profile URL\"},\"browserType\":{\"type\":\"string\",\"description\":\"Type of browser on the device\"},\"frequency\":{\"type\":\"string\",\"description\":\"Frequency bands supported by the device\"},\"edge\":{\"type\":\"boolean\",\"description\":\"Whether the device supports EDGE network\"},\"umts\":{\"type\":\"boolean\",\"description\":\"Whether the device supports UMTS network\"},\"hsdpa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSDPA\"},\"hsupa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSUPA\"},\"hspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports HSPA\"},\"dcHspa\":{\"type\":\"boolean\",\"description\":\"Whether the device supports DC-HSPA\"},\"lte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE\"},\"lteA\":{\"type\":\"boolean\",\"description\":\"Whether the device supports LTE Advanced\"},\"volte\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Voice over LTE\"},\"wifiCalling\":{\"type\":\"boolean\",\"description\":\"Whether the device supports WiFi calling\"},\"supportedRingtones\":{\"type\":\"array\",\"description\":\"Types of ringtones supported by the device\",\"items\":{\"type\":\"string\"}},\"supportedVideoFormat\":{\"type\":\"array\",\"description\":\"Video formats supported by the device\",\"items\":{\"type\":\"string\"}},\"hasCamera\":{\"type\":\"boolean\",\"description\":\"Whether the device has a camera\"},\"hasVideoCall\":{\"type\":\"boolean\",\"description\":\"Whether the device supports video calling\"},\"hasVoiceVoip\":{\"type\":\"boolean\",\"description\":\"Whether the device supports voice over IP\"},\"hasBluetooth\":{\"type\":\"boolean\",\"description\":\"Whether the device has Bluetooth\"},\"hasWirelessLan\":{\"type\":\"boolean\",\"description\":\"Whether the device has wireless LAN capability\"},\"hasGps\":{\"type\":\"boolean\",\"description\":\"Whether the device has GPS\"},\"hasJavaMidp\":{\"type\":\"boolean\",\"description\":\"Whether the device supports Java MIDP\"},\"hasSms\":{\"type\":\"boolean\",\"description\":\"Whether the device supports SMS\"}},\"required\":[\"id\",\"manufacturer\",\"model\"],\"additionalProperties\":false}}}}}}"
+                  }
+                },
+                "output": {
+                  "output": {
+                    "type": "json",
+                    "value": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"exist\":{\"type\":\"boolean\"},\"data\":{\"type\":\"string\"}}}",
+                    "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"exist\":{\"type\":\"boolean\"},\"data\":{\"type\":\"string\"}}}"
+                  }
+                },
+                "settings": {
+                  "objectSchema": "schema://Devices"
+                }
+              },
+              "feSchemaMap": {}
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiTWFwcGVyIjp7IngiOjI2NywieSI6MTAwfSwiU2hhcmVkRGF0YSI6eyJ4Ijo1MTksInkiOjEwMH19",
+        "metadata": {
+          "input": [],
+          "output": [],
+          "fe_metadata": {}
+        }
+      }
     }
   ],
-  "properties": [],
+  "properties": [
+    {
+      "name": "mongodb.mydb.Connection_URL",
+      "type": "string",
+      "value": "mongodb://flogo:flogo@mongodb:27017/mydb"
+    },
+    {
+      "name": "mongodb.mydb.SSL",
+      "type": "boolean",
+      "value": false
+    }
+  ],
   "schemas": {
     "Device": {
       "type": "json",
@@ -1776,8 +2025,31 @@
       "content": "dHlwZSBEZXZpY2Ugew0KICAjIEJhc2ljIGRldmljZSBpbmZvcm1hdGlvbg0KICBpZDogSUQhDQogIG1hbnVmYWN0dXJlcjogU3RyaW5nDQogIG1vZGVsOiBTdHJpbmcNCiAgeWVhcjogSW50DQogIHBpY3R1cmU6IFN0cmluZw0KICANCiAgIyBEZXZpY2UgdHlwZSBhbmQgc2NyZWVuDQogIGRldmljZVR5cGU6IFN0cmluZw0KICB0b3VjaFNjcmVlbjogQm9vbGVhbg0KICANCiAgIyBPcGVyYXRpbmcgc3lzdGVtDQogIG9zOiBTdHJpbmcNCiAgb3NOYW1lOiBTdHJpbmcNCiAgb3NWZXJzaW9uOiBTdHJpbmcNCiAgDQogICMgV0FQIGFuZCBicm93c2VyIGluZm9ybWF0aW9uDQogIHdhcFN0YWNrVmVyc2lvbjogU3RyaW5nDQogIHdhcEJyb3dzZXJWZXJzaW9uOiBTdHJpbmcNCiAgdWFQcm9mOiBTdHJpbmcNCiAgYnJvd3NlclR5cGU6IFN0cmluZw0KICANCiAgIyBOZXR3b3JrIGNvbm5lY3Rpdml0eQ0KICBmcmVxdWVuY3k6IFN0cmluZw0KICBlZGdlOiBCb29sZWFuDQogIHVtdHM6IEJvb2xlYW4NCiAgaHNkcGE6IEJvb2xlYW4NCiAgaHN1cGE6IEJvb2xlYW4NCiAgaHNwYTogQm9vbGVhbg0KICBkY0hzcGE6IEJvb2xlYW4NCiAgbHRlOiBCb29sZWFuDQogIGx0ZUE6IEJvb2xlYW4NCiAgdm9sdGU6IEJvb2xlYW4NCiAgd2lmaUNhbGxpbmc6IEJvb2xlYW4NCiAgDQogICMgRmVhdHVyZXMNCiAgc3VwcG9ydGVkUmluZ3RvbmVzOiBbU3RyaW5nXQ0KICBzdXBwb3J0ZWRWaWRlb0Zvcm1hdDogW1N0cmluZ10NCiAgaGFzQ2FtZXJhOiBCb29sZWFuDQogIGhhc1ZpZGVvQ2FsbDogQm9vbGVhbg0KICBoYXNWb2ljZVZvaXA6IEJvb2xlYW4NCiAgaGFzQmx1ZXRvb3RoOiBCb29sZWFuDQogIGhhc1dpcmVsZXNzTGFuOiBCb29sZWFuDQogIGhhc0dwczogQm9vbGVhbg0KICBoYXNKYXZhTWlkcDogQm9vbGVhbg0KICBoYXNTbXM6IEJvb2xlYW4NCn0NCg0KdHlwZSBRdWVyeSB7DQogICMgR2V0IGEgZGV2aWNlIGJ5IElEDQogIGRldmljZShpZDogSUQhKTogRGV2aWNlDQogIA0KICAjIEdldCBhbGwgZGV2aWNlcw0KICBkZXZpY2VzOiBbRGV2aWNlXQ0KICANCiAgIyBTZWFyY2ggZGV2aWNlcyBieSB2YXJpb3VzIGNyaXRlcmlhDQogIHNlYXJjaERldmljZXMoDQogICAgbWFudWZhY3R1cmVyOiBTdHJpbmcNCiAgICBtb2RlbDogU3RyaW5nDQogICAgeWVhcjogSW50DQogICAgZGV2aWNlVHlwZTogU3RyaW5nDQogICAgaGFzQ2FtZXJhOiBCb29sZWFuDQogICAgaGFzVG91Y2hTY3JlZW46IEJvb2xlYW4NCiAgICBvc05hbWU6IFN0cmluZw0KICApOiBbRGV2aWNlXQ0KICANCiAgIyBHZXQgZGV2aWNlcyBieSBtYW51ZmFjdHVyZXINCiAgZGV2aWNlc0J5TWFudWZhY3R1cmVyKG1hbnVmYWN0dXJlcjogU3RyaW5nISk6IFtEZXZpY2VdDQogIA0KICAjIEdldCBkZXZpY2VzIGJ5IG5ldHdvcmsgY2FwYWJpbGl0eQ0KICBkZXZpY2VzQnlOZXR3b3JrQ2FwYWJpbGl0eSgNCiAgICBsdGU6IEJvb2xlYW4NCiAgICB2b2x0ZTogQm9vbGVhbg0KICAgIHdpZmlDYWxsaW5nOiBCb29sZWFuDQogICk6IFtEZXZpY2VdDQp9"
     }
   },
-  "connections": {},
-  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuNSIsInRhZyI6IjEuNi41LWIwNCIsIm5hbWUiOiJHZW5lcmFsIiwiczNsb2NhdGlvbiI6IlRpYmNvL0dlbmVyYWwiLCJpc1VzZXJFeHRlbnNpb24iOmZhbHNlfV0=",
+  "connections": {
+    "6ddea435-817b-4ed6-8d62-fb8b131ea4e4": {
+      "id": "6ddea435-817b-4ed6-8d62-fb8b131ea4e4",
+      "name": "mydb",
+      "ref": "#connection",
+      "isGlobal": false,
+      "settings": {
+        "name": "mydb",
+        "description": "",
+        "connectionURI": "=$property[\"mongodb.mydb.Connection_URL\"]",
+        "credType": "None",
+        "authenticationDB": "",
+        "username": "",
+        "password": "",
+        "ssl": "=$property[\"mongodb.mydb.SSL\"]",
+        "x509": false,
+        "trustCert": "",
+        "clientCert": "",
+        "clientKey": "",
+        "keyPassword": "",
+        "DocsMetadata": "{\n\t\"mongodb_schema\": {\n        \"eventlistener\":{\n            \"summary\": \"Mongodb eventlistener\",\n            \"action\": \"eventlistener\",\n            \"output\": {\n                  \"$id\": \"http://example.com/example.json\",\n                  \"type\": \"object\",\n                  \"definitions\": {},\n                  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n                  \"additionalProperties\": false,\n                  \"properties\": {               \n                      \"NameSpace\": {\"type\" : \"object\"},\n                      \"OperationType\": {\"type\" : \"string\"},\n                      \"ResultDocument\": {\"type\" : \"object\"}                                    \n                  }\n              }\n        },\n\t\t\"Insert One\": {\n\t\t\t\"summary\": \"Insert document in Mongodb\",\n\t\t\t\"schema\": {\n                \"parameters\": {\n                    \"$id\": \"http://example.com/example.json\",\n                    \"type\": \"object\",\n                    \"definitions\": {},\n                    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n                    \"additionalProperties\": false,\n                    \"properties\": {\n                      \"jsonDocument\": {\n                        \"description\": \"\",\n                        \"required\": true,\n                        \"type\": \"any\"\n                      }\n                    },\n                    \"required\": [\n                      \"jsonDocument\"\n                    ]\n                  },\n\t\t\t\t\"output\": {\n\t\t\t\t\t\"type\": \"object\",\n                    \"properties\": {\n                        \"insertedId\": {\n                            \"description\": \"\",\n                            \"required\": false,\n                            \"type\": \"string\"\n                        }\n                    }\n\t\t\t\t}\n\t\t\t}\n        },\n        \"Insert Many\": {\n\t\t\t\"summary\": \"Insert document in Mongodb\",\n\t\t\t\"schema\": {\n                \"parameters\": {\n                    \"$id\": \"http://example.com/example.json\",\n                    \"type\": \"object\",\n                    \"definitions\": {},\n                    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n                    \"additionalProperties\": false,\n                    \"properties\": {\n                      \"jsonDocument\": {\n                        \"description\": \"\",\n                        \"required\": true,\n                        \"type\": \"any\"\n                      }\n                    },\n                    \"required\": [\n                      \"jsonDocument\"\n                    ]\n                  },\n\t\t\t\t\"output\": {\n\t\t\t\t\t\"type\": \"object\",\n                    \"properties\": {\n                        \"insertedId\": {\n                            \"description\": \"\",\n                            \"required\": false,\n                            \"type\": \"string\"\n                        },\n                        \"totalCount\": {\n                            \"description\": \"\",\n                            \"required\": false,\n                            \"type\": \"integer\"\n                        },\n                        \"suceedNum\": {\n                            \"description\": \"\",\n                            \"required\": false,\n                            \"type\": \"integer\"\n                        },\n                        \"failedNum\": {\n                            \"description\": \"\",\n                            \"required\": false,\n                            \"type\": \"integer\"\n                        }\n                    }\n\t\t\t\t}\n\t\t\t}\n        },\n        \"Query Document\": {\n\t\t\t\"summary\": \"Insert document in Mongodb\",\n\t\t\t\"schema\": {\n                \"parameters\": {\n                    \"$id\": \"http://example.com/example.json\",\n                    \"type\": \"object\",\n                    \"definitions\": {},\n                    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n                    \"additionalProperties\": false,\n                    \"properties\": {\n                      \"jsonDocument\": {\n                        \"description\": \"\",\n                        \"required\": true,\n                        \"type\": \"any\"\n                      }\n                    },\n                    \"required\": [\n                      \"jsonDocument\"\n                    ]\n                  },\n\t\t\t\t\"output\": { \n\t\t\t\t\t\"type\": \"object\"\n\t\t\t\t}\n\t\t\t}\n        },\n        \"Remove Document\": {\n\t\t\t\"summary\": \"Delete document in Mongodb\",\n\t\t\t\"schema\": {\n                \"parameters\": {\n                    \"$id\": \"http://example.com/example.json\",\n                    \"type\": \"object\",\n                    \"definitions\": {},\n                    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n                    \"additionalProperties\": false,\n                    \"properties\": {\n                      \"jsonDocument\": {\n                        \"description\": \"\",\n                        \"required\": true,\n                        \"type\": \"any\"\n                      }\n                    },\n                    \"required\": [\n                      \"jsonDocument\"\n                    ]\n                  },\n\t\t\t\t\"output\": {\n\t\t\t\t\t\"type\": \"object\",\n                    \"properties\": {\n                        \"deletedCount\": {\n                            \"description\": \"\",\n                            \"required\": false,\n                            \"type\": \"integer\"\n                        }\n                    }\n\t\t\t\t}\n\t\t\t}\n        },\n        \"Update Document\": {\n            \"summary\": \"Insert document in Mongodb\",\n            \"schema\": {\n                \"parameters\": {\n                    \"$id\": \"http://example.com/example.json\",\n                    \"type\": \"object\",\n                    \"definitions\": {},\n                    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n                    \"additionalProperties\": false,\n                    \"properties\": {\n                      \"queryDocument\": {\n                        \"description\": \"\",\n                        \"required\": true,\n                        \"type\": \"any\"\n                      },\n                      \"updateDocument\": {\n                        \"description\": \"\",\n                        \"required\": true,\n                        \"type\": \"any\"\n                      }\n                    },\n                    \"required\": [\n                      \"queryDocument\",\n                      \"updateDocument\"\n                    ]\n                  },\n                \"output\": {\n                    \"type\": \"object\",\n                    \"properties\": {\n                        \"upsertedId\": {\n                            \"description\": \"\",\n                            \"required\": false,\n                            \"type\": \"integer\"\n                        },\n                        \"count\": {\n                            \"description\": \"\",\n                            \"required\": false,\n                            \"type\": \"string\"\n                        }\n                    }\n                }\n            }\n        }\n\t}\n}"
+      }
+    }
+  },
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1nZW5lcmFsL3NyYy9hcHAvR2VuZXJhbCIsImlkIjoiR2VuZXJhbCIsInZlcnNpb24iOiIxLjYuNSIsInRhZyI6IjEuNi41LWIwNCIsIm5hbWUiOiJHZW5lcmFsIiwiczNsb2NhdGlvbiI6IlRpYmNvL0dlbmVyYWwiLCJpc1VzZXJFeHRlbnNpb24iOmZhbHNlfSx7InJlZiI6ImdpdGh1Yi5jb20vcHJvamVjdC1mbG9nby9kYXRhc3RvcmUtY29udHJpYi9tb25nb2RiIiwiaWQiOiJtb25nb2RiIiwidmVyc2lvbiI6IjEuMS4xIiwidGFnIjoiMS4xLjEtYjAxIiwibmFtZSI6Ik1vbmdvZGIiLCJzM2xvY2F0aW9uIjoiVGliY28vbW9uZ29kYiIsImlzVXNlckV4dGVuc2lvbiI6ZmFsc2V9XQ==",
   "metadata": {
     "endpoints": [
       {
