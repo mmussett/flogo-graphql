@@ -33,21 +33,6 @@ docker-tag:
 docker-push:
 	docker push $(REGISTRY)/$(IMAGE_NAME):$(TAG) 
 
-# Run the Docker container
-.PHONY: docker-run
-docker-run:
-	docker run -d --network mongo-network --rm --name $(CONTAINER_NAME) -e FLOGO_LOG_LEVEL=INFO -e FLOGO_RUNNER_TYPE=DIRECT -p 4000:4000 $(IMAGE_NAME):$(TAG)
-
-# Stop the Docker container
-.PHONY: docker-stop
-docker-stop:
-	docker stop $(CONTAINER_NAME)
-
-# Remove the Docker image
-.PHONY: docker-rmi
-docker-rmi:
-	docker rmi $(IMAGE_NAME):$(TAG)
-
 .PHONY:  remove-binary
 remove-binary:
 	rm ./bin/${IMAGE_NAME}
@@ -55,4 +40,3 @@ remove-binary:
 # Clean up images and containers
 .PHONY: clean
 clean: stop remove-image remove-binary
-
