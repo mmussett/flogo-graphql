@@ -7,6 +7,7 @@ services:
       - .env
     environment:
       FLOGO_LOG_LEVEL: info
+      FLOGO_APP_PROPS_ENV: auto
     ports:
       - "4000:4000"
     networks:
