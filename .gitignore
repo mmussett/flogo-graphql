@@ -1,2 +1,3 @@
 bin/*
-mock/mock-flogo-graphql
+mock/bin/*
+mock/tp/*

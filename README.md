@@ -8,6 +8,19 @@
 * Query for devices by network capability
 * Query for devices by well-known fields
 
+## Pre-requisites
+
+Make file uses calls to flogo-cli tool. Make sure it's available on your path. You'll need to setup your context first. E.g.
+
+```bash
+flogo-cli create-context -n latest -v /home/mmussett/flogo-vscode-linux-x64-1.3.0-1008.vsix --set-default
+```
+
+Whatever you decide to call your context, it needs to be the same as set in the FLOGO_CONTEXT variable in the Makefile, thus..
+
+```
+FLOGO_CONTEXT=latest
+```
 
 ## Building the demo
 
@@ -17,6 +30,7 @@ Run make with the build target...
 ```bash
 make build
 ```
+
 
 ## Starting the demo
 
