@@ -1564,9 +1564,9 @@
       }
     },
     {
-      "id": "flow:onStartup_1",
+      "id": "flow:fetchFromMockData",
       "data": {
-        "name": "onStartup_1",
+        "name": "fetchFromMockData",
         "description": "Create some sample data and store it in a Shared Data object",
         "links": [
           {
