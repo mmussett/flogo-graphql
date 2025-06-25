@@ -144,3 +144,62 @@ type Query {
 
 Open a browser with the following URL https://studio.apollographql.com/sandbox/explorer/?
 
+Endpoint exposed by API will be http://localhost:4000/graphql
+
+![Alt text](./docs/connectionSettings.png)
+
+
+### Schema
+
+![Alt text](./docs/schema.png)
+
+
+### Example Query to fetch all devices for a manufacturer
+
+```graphql
+
+{
+  "manufacturer": "Apple"
+}
+
+query Query($manufacturer: String!) {
+  devicesByManufacturer(manufacturer: $manufacturer) {
+    model
+  }
+}
+```
+
+Results in the following
+
+```json
+{
+  "data": {
+    "devicesByManufacturer": [
+      {
+        "model": "iPhone 15 Pro"
+      },
+      {
+        "model": "iPad Pro 12.9 (6th Gen)"
+      },
+      {
+        "model": "iPad Pro 11 (4th Gen)"
+      },
+      {
+        "model": "iPad Air (5th Gen)"
+      },
+      {
+        "model": "iPad Air (4th Gen)"
+      },
+      {
+        "model": "iPad (10th Gen)"
+      },
+      {
+        "model": "iPad mini (6th Gen)"
+      }
+    ]
+  }
+}
+```
+
+
+![Alt text](./docs/devicesByManufacturer.png)
