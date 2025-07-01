@@ -974,7 +974,7 @@
                   "data": {
                     "mapping": {
                       "Device": {
-                        "@foreach($activity[ResultsMapper].output, Device)": {
+                        "@foreach($activity[ResultsMapper].output,Device)": {
                           "id": "=$loop.id",
                           "manufacturer": "=$loop.manufacturer",
                           "model": "=$loop.model",

@@ -11,10 +11,9 @@ services:
     ports:
       - "4000:4000"
     networks:
-      - mongodb_network
+      - mongo-network
 
 
 networks:
-  mongodb_network:
-    driver: bridge
-    name: mongo-network
+  mongo-network:
+    external: true
