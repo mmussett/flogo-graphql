@@ -41,6 +41,14 @@ docker-push:
 remove-binary:
 	rm ./bin/${IMAGE_NAME}
 
+.PHONY: start
+start:
+	docker compose up -d
+
+.PHONY: stop
+stop:
+	docker compose down 
+	
 # Clean up images and containers
 .PHONY: clean
 clean: stop remove-image remove-binary
